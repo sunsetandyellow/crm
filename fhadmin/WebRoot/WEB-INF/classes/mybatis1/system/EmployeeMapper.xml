@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="EmployeeMapper">
+	<resultMap type="Employee" id="employeeResultMap">
+		<id column="ID" property="ID"/>
+		<result column="NAME" property="NAME"/>
+		<result column="SEX" property="SEX"/>
+		<result column="AGE" property="AGE"/>
+	</resultMap>
+	<!--表名 -->
+	<sql id="tableName">
+		EMPLOYEE
+	</sql>
+	<!-- 字段 -->
+	<sql id="Field">
+		ID,
+ 		NAME,
+ 		SEX,
+ 		AGE
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{ID},
+ 		#{NAME},
+ 		#{SEX},
+ 		#{AGE}
+	</sql>
+	<!-- 查询所有员工信息 -->
+	<select id="listAll" parameterType="String" resultMap="employeeResultMap">
+		select  
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+	</select>
+	<!-- 查询所有员工信息 -->
+	<select id="getEmployeeById" parameterType="pd" resultMap="employeeResultMap">
+		select  
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+			<where>
+			<if test="id != null and id != ''">
+			<![CDATA[  ID=#{id} ]]>
+			</if>
+			</where>
+			
+	</select>
+	<!--新增 -->
+	<insert id="insertEmployee" parameterType="Employee">
+		insert into 
+			<include refid="tableName"></include> 
+		(
+			<include refid="Field"></include>
+		) values (
+			<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!--编辑 -->
+	<update id="updateEmployee" parameterType="Employee">
+		update 
+		<include refid="tableName"></include> 
+		<![CDATA[  
+		set 
+			NAME =#{NAME},
+			SEX =#{SEX} ,
+			AGE=#{AGE}
+		where 
+			ID=#{ID}
+		 ]]>
+		
+	</update>
+	<delete id="deleteEmployee" parameterType="pd">
+	delete from
+		<include refid="tableName"></include> 
+		<![CDATA[  
+		where 
+			ID=#{id}
+		 ]]>
+	</delete>
+	
+</mapper>
